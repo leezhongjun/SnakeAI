@@ -5,7 +5,7 @@ from tqdm import tqdm
 from custom_env import SnakeEnv
 import search
 
-DQN_URL = ""
+DQN_URL = "https://www.dropbox.com/s/mt1y5xh6z4s6pn4/dqn_snake.zip?raw=1"
 
 algos = {'greedy': search.greedy_search, 'random': search.random_search, 'dqn': None}
 
@@ -46,7 +46,7 @@ for x in pbar:
     while True:
         if rl:
             action, _states = model.predict(obs, deterministic=True)
-            obs, r, done, info = env.step(action)
+            obs, r, done, info = env.step(int(action))
         else:
             action = algo(raw_obs)
             raw_obs, r, done = env.step_for_algo(action)

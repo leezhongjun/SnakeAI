@@ -5,13 +5,15 @@ Uses [Gymnasium](https://gymnasium.farama.org/) and [StableBaselines3](https://s
 
 This uses a 12x12 grid, with the snake having initial size of 4
 
+RL algorithms implemented: DQN, QR-DQN, PPO, Recurrent PPO, A2C
+
 ## Algorithms
 Each algorithm is tested for 1000 episodes
 | Algorithm | Average score | Average steps | Average score per step |
 | --- | --- | --- | --- |
 | Random | 2.45 | 424.08 | 0.01 |
 | Greedy | 19.90 | 194.89 | 0.11 |
-| DQN | 28.01 | 314.11 | 0.09 |
+| DQN | 33.36 | 392.85 | 0.09 |
 
 ### Random search
  - One move horizon
@@ -26,8 +28,8 @@ Each algorithm is tested for 1000 episodes
 ### DQN
  - [StableBaselines3](https://stable-baselines3.readthedocs.io/en/master/) DQN model to predict the best move
  - DQN trained for 10,000,000 episodes
- - Hyperparameters in `dqn.py`
- - Download trained DQN model [here]() or let it download automatically when running benchmark
+ - Hyperparameters in `dqn.py` and based on those used on Atari games
+ - Download trained DQN model [here](https://www.dropbox.com/s/mt1y5xh6z4s6pn4/dqn_snake.zip?raw=1) (script downloads it automatically)
 
 ## Gym environment
 Uses a custom [Gymnasium](https://gymnasium.farama.org/) environment for snake game
@@ -50,7 +52,7 @@ Actions are made with tensor operations, inspired by [this Medium article](https
 ```
 pip install -r requirements.txt
 ```
-2. Run `benchmark.py` and pass optional arguments (defaults to greedy search without rendering) for benchmarking
+2. Run `benchmark.py` and pass optional arguments (defaults to greedy search without rendering)
 ```
 python benchmark.py [-h] [--algo {greedy,random,dqn}] [--grid_size GRID_SIZE] [--initial_size INITIAL_SIZE] [--episodes EPISODES] [--show_render SHOW_RENDER] [--delay DELAY]
 ```
@@ -63,10 +65,14 @@ python dqn.py
 tensorboard --logdir ./tensorboard/
 ```
 
-## To do
+### To do
  - [ ] Add more algorithms (A*, Hamiltonian path, etc.)
  - [ ] Finish training other models
-    - [ ] QRDQN
+    - [ ] QR-DQN
     - [ ] PPO
     - [ ] Recurrent PPO
     - [ ] A2C
+
+### References
+ - [Automated Snake Game Solvers via AI Search Algorithms (pdf)](https://bpb-us-e2.wpmucdn.com/sites.uci.edu/dist/5/1894/files/2016/12/AutomatedSnakeGameSolvers.pdf)
+ - [chuyangliu/snake](https://github.com/chuyangliu/snake)
