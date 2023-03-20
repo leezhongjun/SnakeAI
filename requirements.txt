@@ -1,0 +1,8 @@
+pygame
+gymnasium[all]
+stable-baselines3
+pyglet
+torchvision
+torch
+numpy
+sb3-contrib
