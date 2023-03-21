@@ -91,7 +91,7 @@ tensorboard --logdir ./tensorboard/
 ```
 
 ### To do
- - [ ] Add snake boody border
+ - [ ] Add snake body border
  - [ ] Finish training other models
     - [ ] QR-DQN
     - [ ] PPO
