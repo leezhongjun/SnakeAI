@@ -15,7 +15,11 @@ checkpoint_callback = CheckpointCallback(
 
 model = QRDQN('CnnPolicy', env, verbose=1, \
                 tensorboard_log="./tensorboard/", \
-                optimize_memory_usage=False, exploration_fraction=0.025)
+                buffer_size=100000, learning_rate=1e-4, \
+                batch_size=32, learning_starts=100000, target_update_interval=1000, \
+                train_freq=4, gradient_steps=1, exploration_fraction=0.1, exploration_final_eps=0.01, \
+                optimize_memory_usage=False)
+
 
 # # Train the agent and display a progress bar
 model.learn(total_timesteps=int(1e7), progress_bar=True, callback=checkpoint_callback)
