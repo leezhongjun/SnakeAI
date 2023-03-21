@@ -16,6 +16,7 @@ Each algorithm is tested for 1000 episodes
 | DFS | ![dfs_vid](/vid_saves/dfs_vid_0.gif) | 20.13 | 531.34 | 0.04 |
 | BFS | ![bfs_vid](/vid_saves/bfs_vid_0.gif) | 31.35 | 323.61 | 0.10 |
 | Hamiltonian | ![ham_vid](/vid_saves/ham_vid_0.gif) | 140.00 | 5016.69 | 0.03 |
+| Optimised Hamiltonian | ![op_ham_vid](/vid_saves/op_ham_vid_0.gif) | 140.00 | 4585.47 | 0.03 |
 | DQN | ![dqn_vid](/vid_saves/dqn_vid_0.gif) | 33.36 | 392.85 | 0.09 |
 | A2C | ![a2c_vid](/vid_saves/a2c_vid_0.gif) | 19.18 | 178.57 | 0.11 |
 
