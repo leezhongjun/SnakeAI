@@ -56,6 +56,9 @@ Rewards (modifiable):
 
 Actions are made with tensor operations, inspired by [this Medium article](https://medium.com/@oknagg/learning-to-play-snake-at-1-million-fps-4aae8d36d2f1)
 
+## Conclusion
+Current RL approaches to snake are not very effective compared to algorithmic approaches. Successful RL approaches often have [heavy reward shaping](https://www.reddit.com/r/reinforcementlearning/comments/zfvyq1/ai_beats_snake_game_with_deep_qlearning/) (e.g. [distance to food](https://openreview.net/pdf?id=iu2XOJ45cxo)) or use observations besides the pure RGB display (e.g. [direction to food](https://ieeexplore.ieee.org/document/9480232)).
+
 ## To use
 1. Install requirements
 ```
