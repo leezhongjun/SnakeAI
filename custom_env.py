@@ -118,15 +118,19 @@ class SnakeEnv(gym.Env):
 			if self.size == self.grid_size * self.grid_size:
 				self.done = True
 				return
-			self.spawn_food()
+			
+			# Add head to body
+			self.obs[BODY] += self.obs[HEAD] * self.size
+
 			# Body doesnt move forward if head reached food
+			self.spawn_food()
 		else:
 			# Move body forward
 			self.obs[BODY] -= 1
 			self.obs[BODY] = F.relu(self.obs[BODY])
 
-		# Add head to body
-		self.obs[BODY] += self.obs[HEAD] * self.size
+			# Add head to body
+			self.obs[BODY] += self.obs[HEAD] * self.size
 			
 	def step_for_algo(self, action):
 		'''Take action & update the env

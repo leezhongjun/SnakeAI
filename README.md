@@ -15,6 +15,7 @@ Each algorithm is tested for 1000 episodes
 | Greedy | ![greedy_vid](/vid_saves/greedy_vid_0.gif) | 19.90 | 194.89 | 0.11 |
 | DFS | ![dfs_vid](/vid_saves/dfs_vid_0.gif) | 20.13 | 531.34 | 0.04 |
 | BFS | ![bfs_vid](/vid_saves/bfs_vid_0.gif) | 31.35 | 323.61 | 0.10 |
+| Hamiltonian | ![ham_vid](/vid_saves/ham_vid_0.gif) | 140.00 | 5016.69 | 0.03 |
 | DQN | ![dqn_vid](/vid_saves/dqn_vid_0.gif) | 33.36 | 392.85 | 0.09 |
 
 ### Random search
@@ -33,6 +34,12 @@ Each algorithm is tested for 1000 episodes
 ### BFS
  - Breadth first search to find a complete (and shortest) path to the food
  - If there is no path to the food, use greedy search
+
+### Hamiltonian path
+ - Follows a Hamiltonian path (a path that visits every node once)
+ - Guarantees that the snake will never die
+ - Calculated via longest path
+ - Only works with even-sized grids
 
 ### DQN
  - [StableBaselines3](https://stable-baselines3.readthedocs.io/en/master/) DQN model to predict the best move
@@ -66,7 +73,7 @@ pip install -r requirements.txt
 ```
 2. Run `benchmark.py` and pass optional arguments (defaults to greedy search without rendering)
 ```
-python benchmark.py [-h] [--algo {greedy,random,bfs,dfs,dqn}] [--grid_size GRID_SIZE] [--initial_size INITIAL_SIZE] [--episodes EPISODES] [--show_render SHOW_RENDER] [--delay DELAY] [--save_gif SAVE_GIF]
+python benchmark.py [-h] [--algo {greedy,random,bfs,dfs,ham,dqn}] [--grid_size GRID_SIZE] [--initial_size INITIAL_SIZE] [--episodes EPISODES] [--show_render SHOW_RENDER] [--delay DELAY] [--save_gif SAVE_GIF]
 ```
 3. Run `dqn.py` to train a DQN model
 ```
@@ -78,7 +85,7 @@ tensorboard --logdir ./tensorboard/
 ```
 
 ### To do
- - [ ] Add more algorithms (A*, Hamiltonian path, etc.)
+ - [ ] Add more algorithms (A*, etc.)
  - [ ] Finish training other models
     - [ ] QR-DQN
     - [ ] PPO

@@ -7,7 +7,7 @@ import search
 
 DQN_URL = "https://www.dropbox.com/s/mt1y5xh6z4s6pn4/dqn_snake.zip?raw=1"
 
-algos = {'greedy': search.greedy_search, 'random': search.random_search, 'bfs': search.bfs_search, 'dfs': search.dfs_search, 'dqn': None}
+algos = {'greedy': search.greedy_search, 'random': search.random_search, 'bfs': search.bfs_search, 'dfs': search.dfs_search, 'ham': search.hamiltonian_path_search,'dqn': None}
 
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('--algo', type=str, default='greedy', choices=list(algos.keys()), help='Algorithm to use')
@@ -15,7 +15,7 @@ parser.add_argument('--grid_size', type=int, default=12, help='Grid size')
 parser.add_argument('--initial_size', type=int, default=4, help='Initial snake size')
 parser.add_argument('--episodes', type=int, default=1000, help='Number of episodes to run')
 parser.add_argument('--show_render', type=bool, default=False, help='Render the game or not')
-parser.add_argument('--delay', type=float, default=0, help='Add a delay per frame rendered')
+parser.add_argument('--delay', type=float, default=0, help='Add a delay between frames rendered')
 parser.add_argument('--save_gif', type=str, default='', help='Enter a filename to save the gif as (e.g. snake_video). Leave blank to not save gif.')
 
 args = parser.parse_args()
