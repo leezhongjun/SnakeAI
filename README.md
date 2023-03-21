@@ -63,7 +63,7 @@ pip install -r requirements.txt
 ```
 2. Run `benchmark.py` and pass optional arguments (defaults to greedy search without rendering)
 ```
-python benchmark.py [-h] [--algo {greedy,random,dqn}] [--grid_size GRID_SIZE] [--initial_size INITIAL_SIZE] [--episodes EPISODES] [--show_render SHOW_RENDER] [--delay DELAY]
+python benchmark.py [-h] [--algo {greedy,random,bfs,dfs,dqn}] [--grid_size GRID_SIZE] [--initial_size INITIAL_SIZE] [--episodes EPISODES] [--show_render SHOW_RENDER] [--delay DELAY] [--save_gif SAVE_GIF]
 ```
 3. Run `dqn.py` to train a DQN model
 ```
