@@ -1,5 +1,5 @@
 # SnakeAI
-Single agent Snake AI using RL and search algorithms
+Single agent [Snake](https://en.wikipedia.org/wiki/Snake_(video_game)) AI using RL and search algorithms
 
 Uses [Gymnasium](https://gymnasium.farama.org/) and [StableBaselines3](https://stable-baselines3.readthedocs.io/en/master/)
 
@@ -30,11 +30,11 @@ Each algorithm is tested for 1000 episodes
  - If there is something blocking, move in another direction
 
 ### DFS
- - Depth first search to find a complete path to the food
+ - Depth-first search to find a complete path to the food
  - If there is no path to the food, use greedy search
 
 ### BFS
- - Breadth first search to find a complete (and shortest) path to the food
+ - Breadth-first search to find a complete (and shortest) path to the food
  - If there is no path to the food, use greedy search
 
 ### Hamiltonian path
@@ -44,14 +44,15 @@ Each algorithm is tested for 1000 episodes
  - Only works with even-sized grids
 
 ### Optimised Hamiltonian path
- - Like hamiltonian path but it takes shortcuts
- ![img](https://raw.githubusercontent.com/chuyangliu/snake/master/docs/images/take_shortcuts.png)
+ - Uses Hamiltonian path but it takes shortcuts
+ 
+ ![take_shortcuts](https://user-images.githubusercontent.com/80515759/226577899-467443c3-5982-4e40-bbf1-b6302377f951.png)
 
 ### Reinforcement learning
  - [StableBaselines3](https://stable-baselines3.readthedocs.io/en/master/) models
  - All models trained for 10,000,000 episodes
  - Hyperparameters based on those used on Atari games
- - Script downloads models automatically
+ - Script downloads trained models automatically
 
 ## Gym environment
 Uses a custom [Gymnasium](https://gymnasium.farama.org/) environment for snake game
@@ -91,7 +92,7 @@ tensorboard --logdir ./tensorboard/
 ```
 
 ### To do
- - [ ] Add snake body border
+ - [x] Add snake body border
  - [ ] Finish training other models
     - [ ] QR-DQN
     - [ ] PPO

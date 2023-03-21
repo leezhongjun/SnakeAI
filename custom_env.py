@@ -170,6 +170,34 @@ class SnakeEnv(gym.Env):
 		img = (img * 255).permute(1, 2, 0).numpy()
 		img = np.uint8(img)
 		img = cv2.resize(img, (84, 84), interpolation = cv2.INTER_AREA)
+		
+		# draw snake body
+		for i in range(self.grid_size):
+			for j in range(self.grid_size):
+				
+				line_ls = [((i*7,j*7), (i*7, j*7 + 7)), \
+	       				((i*7 + 7, j*7), (i*7 + 7, j*7 + 7)), \
+						((i*7, j*7), (i*7 + 7, j*7)), \
+						((i*7, j*7 + 7), (i*7 + 7, j*7 + 7))]
+				
+				if self.obs[BODY][j][i] > 0:
+					ls = [0,0,0,0]
+					if i != 0 and self.obs[BODY][j][i-1] and abs(self.obs[BODY][j][i] - self.obs[BODY][j][i-1]) == 1:
+						# one left
+						ls[0] = 1
+					if i != self.grid_size - 1 and self.obs[BODY][j][i+1] and abs(self.obs[BODY][j][i] - self.obs[BODY][j][i+1]) == 1:
+						# one right
+						ls[1] = 1
+					if j != 0 and self.obs[BODY][j-1][i] and abs(self.obs[BODY][j][i] - self.obs[BODY][j-1][i]) == 1:
+						# one up
+						ls[2] = 1
+					if j != self.grid_size - 1 and self.obs[BODY][j+1][i] and abs(self.obs[BODY][j][i] - self.obs[BODY][j+1][i]) == 1:
+						# one down
+						ls[3] = 1
+
+					for k in range(len(ls)):
+						if ls[k] == 0:
+							img = cv2.line(img, *line_ls[k], (0,125,0), 1)
 		return img
 
 	def get_score(self):
