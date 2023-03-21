@@ -7,7 +7,7 @@ import search
 
 DQN_URL = "https://www.dropbox.com/s/mt1y5xh6z4s6pn4/dqn_snake.zip?raw=1"
 
-algos = {'greedy': search.greedy_search, 'random': search.random_search, 'dqn': None}
+algos = {'greedy': search.greedy_search, 'random': search.random_search, 'bfs': search.bfs_search, 'dfs': search.dfs_search, 'dqn': None}
 
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('--algo', type=str, default='greedy', choices=list(algos.keys()), help='Algorithm to use')
@@ -16,11 +16,14 @@ parser.add_argument('--initial_size', type=int, default=4, help='Initial snake s
 parser.add_argument('--episodes', type=int, default=1000, help='Number of episodes to run')
 parser.add_argument('--show_render', type=bool, default=False, help='Render the game or not')
 parser.add_argument('--delay', type=float, default=0, help='Add a delay per frame rendered')
+parser.add_argument('--save_gif', type=str, default='', help='Enter a filename to save the gif as (e.g. snake_video). Leave blank to not save gif.')
 
 args = parser.parse_args()
 print(args)
 
 ep = int(args.episodes)
+
+filename = args.save_gif
 
 if args.algo == 'dqn':
     if not os.path.exists('dqn_snake.zip'):
@@ -28,12 +31,12 @@ if args.algo == 'dqn':
         with open('dqn_snake.zip', "wb") as f:
             f.write(resp.content)
         
-    env = SnakeEnv(mode='human', grid_size=int(args.grid_size), initial_size=int(args.initial_size))
+    env = SnakeEnv(mode='human', grid_size=int(args.grid_size), initial_size=int(args.initial_size), save_video=bool(filename))
     model = DQN.load("dqn_snake", env=env)
     rl = True
 else:
     algo = algos[args.algo]
-    env = SnakeEnv(mode='human', grid_size=int(args.grid_size), initial_size=int(args.initial_size))
+    env = SnakeEnv(mode='human', grid_size=int(args.grid_size), initial_size=int(args.initial_size), save_video=bool(filename))
     rl = False
 
 pbar = tqdm(range(ep))
@@ -51,7 +54,8 @@ for x in pbar:
             action = algo(raw_obs)
             raw_obs, r, done = env.step_for_algo(action)
 
-        time.sleep(args.delay)
+        if args.delay:
+            time.sleep(args.delay)
 
         if args.show_render:
             env.render()
@@ -61,6 +65,7 @@ for x in pbar:
         if done:
             break
         
+    env.save_video_func(f"{filename}_{x}.gif")
     ep_r = env.get_score()
     total_s += steps
     total_r_per_s += ep_r/steps

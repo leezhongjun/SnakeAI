@@ -6,3 +6,4 @@ torchvision
 torch
 numpy
 sb3-contrib
+imageio

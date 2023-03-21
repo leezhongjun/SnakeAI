@@ -1,10 +1,12 @@
-from custom_env import HEAD, BODY, FOOD
-import torch
+from custom_env import HEAD, BODY, FOOD, SnakeEnv
+import torch, collections
 import numpy as np
 
 UP, LEFT, DOWN, RIGHT = 0, 1, 2, 3
 
 dir_to_offset = torch.tensor([[-1, 0], [0, -1], [1, 0], [0, 1]])
+
+path = None
 
 def greedy_search(raw_obs):
     '''
@@ -55,3 +57,74 @@ def random_search(raw_obs):
         elif raw_obs[BODY][tuple(head_coord + dir_to_offset[direction])] == 0:
             return direction
     return 0
+
+def bfs_helper(raw_obs):
+    '''
+    Helper function for bfs_search
+    '''
+    head_coord = raw_obs[HEAD].nonzero()[0].tolist()
+    food_coord = tuple(raw_obs[FOOD].nonzero()[0])
+    q = collections.deque([[head_coord]])
+    seen = set(head_coord)
+    while q:
+        path = q.popleft()
+        y, x = path[-1]
+        if (y, x) == food_coord:
+            return path[1:]
+        for x2, y2 in ((x+1,y), (x-1,y), (x,y+1), (x,y-1)):
+            if 0 <= x2 < raw_obs.shape[2] and 0 <= y2 < raw_obs.shape[2] and raw_obs[BODY][y2][x2] == 0 and (y2, x2) not in seen:
+                q.append(path + [(y2, x2)])
+                seen.add((y2, x2))
+    
+    return None
+
+
+def bfs_search(raw_obs):
+    '''
+    BFS search on raw observation
+    '''
+    global path
+    if not path:
+        path = bfs_helper(raw_obs)
+        if not path:
+            return greedy_search(raw_obs)
+        
+    head_coord = raw_obs[HEAD].nonzero()[0]
+    res = torch.where(dir_to_offset == (torch.tensor(path[0]) - head_coord))[0][1]
+    path = path[1:]
+    return int(res)
+
+def dfs_helper(raw_obs):
+    '''
+    Helper function for dfs_search
+    '''
+    head_coord = raw_obs[HEAD].nonzero()[0].tolist()
+    food_coord = tuple(raw_obs[FOOD].nonzero()[0])
+    s = [[head_coord]]
+    seen = set(head_coord)
+    while s:
+        path = s.pop()
+        y, x = path[-1]
+        if (y, x) == food_coord:
+            return path[1:]
+        for x2, y2 in ((x+1,y), (x-1,y), (x,y+1), (x,y-1)):
+            if 0 <= x2 < raw_obs.shape[2] and 0 <= y2 < raw_obs.shape[2] and raw_obs[BODY][y2][x2] == 0 and (y2, x2) not in seen:
+                s.append(path + [(y2, x2)])
+                seen.add((y2, x2))
+    
+    return None
+
+def dfs_search(raw_obs):
+    '''
+    DFS search on raw observation
+    '''
+    global path
+    if not path:
+        path = dfs_helper(raw_obs)
+        if not path:
+            return greedy_search(raw_obs)
+        
+    head_coord = raw_obs[HEAD].nonzero()[0]
+    res = torch.where(dir_to_offset == (torch.tensor(path[0]) - head_coord))[0][1]
+    path = path[1:]
+    return int(res)

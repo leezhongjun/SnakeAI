@@ -9,14 +9,15 @@ RL algorithms implemented: DQN, QR-DQN, PPO, Recurrent PPO, A2C
 
 ## Algorithms
 Each algorithm is tested for 1000 episodes
-| Algorithm | Average score | Average steps | Average score per step |
-| --- | --- | --- | --- |
-| Random | 2.45 | 424.08 | 0.01 |
-| Greedy | 19.90 | 194.89 | 0.11 |
-| DQN | 33.36 | 392.85 | 0.09 |
+| Algorithm | Demo | Average score | Average steps | Average score per step |
+| --- | --- | --- | --- | --- |
+| Random | ![random_vid](/vid_saves/random_vid_0.gif) | 2.45 | 424.08 | 0.01 |
+| Greedy | ![greedy_vid](/vid_saves/greedy_vid_0.gif) | 19.90 | 194.89 | 0.11 |
+| DFS | ![dfs_vid](/vid_saves/dfs_vid_0.gif) | 20.13 | 531.34 | 0.04 |
+| BFS | ![bfs_vid](/vid_saves/bfs_vid_0.gif) | 31.35 | 323.61 | 0.10 |
+| DQN | ![dqn_vid](/vid_saves/dqn_vid_0.gif) | 33.36 | 392.85 | 0.09 |
 
 ### Random search
- - One move horizon
  - Randomly choose a direction
  - If there is something blocking, move in another direction
 
@@ -24,6 +25,14 @@ Each algorithm is tested for 1000 episodes
  - One move horizon
  - Move in the direction of the food
  - If there is something blocking, move in another direction
+
+### DFS
+ - Depth first search to find a complete path to the food
+ - If there is no path to the food, use greedy search
+
+### BFS
+ - Breadth first search to find a complete (and shortest) path to the food
+ - If there is no path to the food, use greedy search
 
 ### DQN
  - [StableBaselines3](https://stable-baselines3.readthedocs.io/en/master/) DQN model to predict the best move

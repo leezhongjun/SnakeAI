@@ -3,7 +3,7 @@ from gym import spaces
 import numpy as np
 import torch
 import torch.nn.functional as F
-import cv2
+import cv2, imageio, os
 
 LEFT = torch.tensor([[ 0,  0,  0], [ 0, -1,  1], [ 0,  0,  0]], dtype=torch.float32)
 RIGHT = torch.tensor([[ 0,  0,  0], [ 1, -1,  0], [ 0,  0,  0]], dtype=torch.float32)
@@ -27,7 +27,7 @@ class SnakeEnv(gym.Env):
         'render_mode': ['human']
     }
 	 
-	def __init__(self, mode='bot', grid_size=20, initial_size=2, alive_reward=ALIVE_REWARD, death_reward=DEATH_REWARD, food_reward=FOOD_REWARD):
+	def __init__(self, mode='bot', grid_size=20, initial_size=2, save_video=False, alive_reward=ALIVE_REWARD, death_reward=DEATH_REWARD, food_reward=FOOD_REWARD):
 		'''Set the action and observation spaces'''
 
 		super().__init__()
@@ -48,6 +48,8 @@ class SnakeEnv(gym.Env):
 		self.reward = self.alive_reward
 		self.window_name = None
 		self.food_coord = (0, 0)
+		self.image_lst = []
+		self.save_video = save_video
 
 	def spawn_food(self):
 		'''Spawn food in a random empty location'''
@@ -66,6 +68,7 @@ class SnakeEnv(gym.Env):
 		self.done = False
 		self.size = self.intitial_size
 		self.reward = self.alive_reward
+		self.image_lst = []
 
 		# Place head in the middle
 		self.obs[HEAD][self.grid_size//2, self.grid_size//2] = 1
@@ -76,6 +79,10 @@ class SnakeEnv(gym.Env):
 
 		# Place food in a random location
 		self.spawn_food()
+
+		if self.save_video:
+			img = self.get_rgb()
+			self.image_lst.append(img)
 
 		return self.get_rgb()
 
@@ -126,6 +133,11 @@ class SnakeEnv(gym.Env):
 		Return -> next-state(raw), reward, done'''
 
 		self.move_in_direction(action)
+
+		if self.save_video:
+			img = self.get_rgb()
+			self.image_lst.append(img)
+
 		return self.get_raw_obs(), self.reward, self.done
 
 	def step(self, action):
@@ -133,6 +145,10 @@ class SnakeEnv(gym.Env):
 		Return -> next-state, reward, done, info'''
 
 		self.move_in_direction(action)
+
+		if self.save_video:
+			img = self.get_rgb()
+			self.image_lst.append(img)
 
 		return self.get_rgb(), self.reward, self.done, {}
 	
@@ -166,4 +182,14 @@ class SnakeEnv(gym.Env):
 			img = self.get_rgb()
 			cv2.imshow(self.window_name, img)
 			cv2.waitKey(1)
+
+		
+
+	def save_video_func(self, video_name='video.gif'):
+		'''Saves the video of the game'''
+		if not os.path.exists('vid_saves'):
+			os.makedirs('vid_saves')
+
+		if self.save_video:
+			imageio.mimsave(f'vid_saves/{video_name}', self.image_lst, fps=60)
 
