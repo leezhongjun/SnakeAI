@@ -11,14 +11,14 @@ RL algorithms implemented: DQN, QR-DQN, PPO, Recurrent PPO, A2C
 Each algorithm is tested for 1000 episodes
 | Algorithm | Demo | Average score | Average steps | Average score per step |
 | --- | --- | --- | --- | --- |
-| Random | ![random_vid](/vid_saves/random_vid_0.gif) | 2.45 | 424.08 | 0.01 |
-| Greedy | ![greedy_vid](/vid_saves/greedy_vid_0.gif) | 19.90 | 194.89 | 0.11 |
-| DFS | ![dfs_vid](/vid_saves/dfs_vid_0.gif) | 20.13 | 531.34 | 0.04 |
-| BFS | ![bfs_vid](/vid_saves/bfs_vid_0.gif) | 31.35 | 323.61 | 0.10 |
-| Hamiltonian | ![ham_vid](/vid_saves/ham_vid_0.gif) | 140.00 | 5016.69 | 0.03 |
-| Optimised Hamiltonian | ![op_ham_vid](/vid_saves/op_ham_vid_0.gif) | 140.00 | 4585.47 | 0.03 |
-| DQN | ![dqn_vid](/vid_saves/dqn_vid_0.gif) | 33.36 | 392.85 | 0.09 |
-| A2C | ![a2c_vid](/vid_saves/a2c_vid_0.gif) | 19.18 | 178.57 | 0.11 |
+| Random | ![random_vid](/vid_saves/random_vid_0.gif) | 2.45 | 424.08 | 0.00578 |
+| Greedy | ![greedy_vid](/vid_saves/greedy_vid_0.gif) | 19.90 | 194.89 | 0.110 |
+| DFS | ![dfs_vid](/vid_saves/dfs_vid_0.gif) | 20.13 | 531.34 | 0.0379 |
+| BFS | ![bfs_vid](/vid_saves/bfs_vid_0.gif) | 31.35 | 323.61 | 0.0969 |
+| Hamiltonian | ![ham_vid](/vid_saves/ham_vid_0.gif) | 140.00 | 5016.69 | 0.0279 |
+| Optimised Hamiltonian | ![op_ham_vid](/vid_saves/op_ham_vid_0.gif) | 140.00 | 4585.47 | 0.0305 |
+| DQN | ![dqn_vid](/vid_saves/dqn_vid_0.gif) | 33.36 | 392.85 | 0.0850 |
+| A2C | ![a2c_vid](/vid_saves/a2c_vid_0.gif) | 19.18 | 178.57 | 0.107 |
 
 ### Random search
  - Randomly choose a direction
