@@ -17,8 +17,7 @@ model = PPO('CnnPolicy', env, verbose=1, \
                         tensorboard_log="./tensorboard/", \
                         batch_size=256, n_steps=128, n_epochs=4, \
                         learning_rate=2.5e-4, clip_range=0.1, vf_coef=0.5, \
-                        ent_coef=0.01, \
-                        policy_kwargs={'enable_critic_lstm': False, 'lstm_hidden_size': 128})
+                        ent_coef=0.01)
 
 # Train the agent and display a progress bar
 model.learn(total_timesteps=int(1e7), progress_bar=True, callback=checkpoint_callback)

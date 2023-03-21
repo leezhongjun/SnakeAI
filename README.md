@@ -17,6 +17,7 @@ Each algorithm is tested for 1000 episodes
 | BFS | ![bfs_vid](/vid_saves/bfs_vid_0.gif) | 31.35 | 323.61 | 0.10 |
 | Hamiltonian | ![ham_vid](/vid_saves/ham_vid_0.gif) | 140.00 | 5016.69 | 0.03 |
 | DQN | ![dqn_vid](/vid_saves/dqn_vid_0.gif) | 33.36 | 392.85 | 0.09 |
+| A2C | ![a2c_vid](/vid_saves/a2c_vid_0.gif) | 19.18 | 178.57 | 0.11 |
 
 ### Random search
  - Randomly choose a direction
@@ -41,11 +42,15 @@ Each algorithm is tested for 1000 episodes
  - Calculated via longest path
  - Only works with even-sized grids
 
-### DQN
- - [StableBaselines3](https://stable-baselines3.readthedocs.io/en/master/) DQN model to predict the best move
- - DQN trained for 10,000,000 episodes
- - Hyperparameters in `dqn.py` and based on those used on Atari games
- - Download trained DQN model [here](https://www.dropbox.com/s/mt1y5xh6z4s6pn4/dqn_snake.zip?raw=1) (script downloads it automatically)
+### Optimised Hamiltonian path
+ - Like hamiltonian path but it takes shortcuts
+ ![img](https://raw.githubusercontent.com/chuyangliu/snake/master/docs/images/take_shortcuts.png)
+
+### Reinforcement learning
+ - [StableBaselines3](https://stable-baselines3.readthedocs.io/en/master/) models
+ - All models trained for 10,000,000 episodes
+ - Hyperparameters based on those used on Atari games
+ - Script downloads models automatically
 
 ## Gym environment
 Uses a custom [Gymnasium](https://gymnasium.farama.org/) environment for snake game
@@ -73,7 +78,7 @@ pip install -r requirements.txt
 ```
 2. Run `benchmark.py` and pass optional arguments (defaults to greedy search without rendering)
 ```
-python benchmark.py [-h] [--algo {greedy,random,bfs,dfs,ham,dqn}] [--grid_size GRID_SIZE] [--initial_size INITIAL_SIZE] [--episodes EPISODES] [--show_render SHOW_RENDER] [--delay DELAY] [--save_gif SAVE_GIF]
+python benchmark.py [-h] [--algo {greedy,random,bfs,dfs,ham,op_ham,dqn,a2c}] [--grid_size GRID_SIZE] [--initial_size INITIAL_SIZE] [--episodes EPISODES] [--show_render SHOW_RENDER] [--delay DELAY] [--save_gif SAVE_GIF]
 ```
 3. Run `dqn.py` to train a DQN model
 ```
@@ -85,12 +90,12 @@ tensorboard --logdir ./tensorboard/
 ```
 
 ### To do
- - [ ] Add more algorithms (A*, etc.)
+ - [ ] Add snake boody border
  - [ ] Finish training other models
     - [ ] QR-DQN
     - [ ] PPO
     - [ ] Recurrent PPO
-    - [ ] A2C
+    - [x] A2C
 
 ### References
  - [Automated Snake Game Solvers via AI Search Algorithms (pdf)](https://bpb-us-e2.wpmucdn.com/sites.uci.edu/dist/5/1894/files/2016/12/AutomatedSnakeGameSolvers.pdf)

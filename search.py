@@ -7,10 +7,13 @@ UP, LEFT, DOWN, RIGHT = 0, 1, 2, 3
 dir_to_offset = torch.tensor([[-1, 0], [0, -1], [1, 0], [0, 1]])
 
 path = None
+hamiltonian_grid = None
+path_h = None
 
-def greedy_search(raw_obs):
+def greedy_search_helper(raw_obs):
     '''
-    Greedy search on raw observation
+    Greedy search helper function
+    Returns coordinate priority list
     '''
     # get direction towards food
     food_coord = raw_obs[FOOD].nonzero()[0]
@@ -33,6 +36,15 @@ def greedy_search(raw_obs):
     for direction in (UP, DOWN, RIGHT, LEFT):
         if direction not in cood_priority:
             cood_priority.append(direction)
+    
+    return cood_priority
+
+def greedy_search(raw_obs):
+    '''
+    Greedy search on raw observation
+    '''
+    cood_priority = greedy_search_helper(raw_obs)
+    head_coord = raw_obs[HEAD].nonzero()[0]
             
     for direction in cood_priority:
         if (head_coord + dir_to_offset[direction]).min() < 0:
@@ -76,7 +88,7 @@ def bfs_helper(raw_obs):
                 q.append(path + [(y2, x2)])
                 seen.add((y2, x2))
     
-    return None
+    return [[]]
 
 
 def bfs_search(raw_obs):
@@ -112,7 +124,7 @@ def dfs_helper(raw_obs):
                 s.append(path + [(y2, x2)])
                 seen.add((y2, x2))
     
-    return None
+    return [[]]
 
 def dfs_search(raw_obs):
     '''
@@ -136,7 +148,7 @@ def longest_path_helper(raw_obs):
     path = bfs_helper(raw_obs)
 
     if not path:
-        return None
+        return [[]]
     path[0] = tuple(path[0])
     seen = set(path)
     path = np.array(path)
@@ -194,7 +206,6 @@ def longest_path_helper(raw_obs):
             
     return path
 
-
 def hamiltonian_path_helper(raw_obs):
     r_obs = torch.zeros(raw_obs.shape)
     r_obs[BODY][0, 1] = 1
@@ -218,3 +229,143 @@ def hamiltonian_path_search(raw_obs):
     if j > len(path): j=0
     res = torch.where(dir_to_offset == (torch.tensor(path[j]) - head_coord))[0][1]
     return int(res)
+
+def bfs_ham_helper(raw_obs):
+    '''
+    Helper function for bfs_ham_search
+    '''
+    print(hamiltonian_grid)
+    head_coord = raw_obs[HEAD].nonzero()[0].tolist()
+    head_val = hamiltonian_grid[head_coord[0], head_coord[1]]
+
+    tail_coord = (raw_obs[BODY] == 1).nonzero()[0]
+    tail_val = hamiltonian_grid[tail_coord[0], tail_coord[1]]
+
+    food_coord = tuple(raw_obs[FOOD].nonzero()[0])
+    q = collections.deque([[head_coord]])
+    seen = set(head_coord)
+    while q:
+        path = q.popleft()
+        y, x = path[-1]
+        if (y, x) == food_coord:
+            return path
+        for x2, y2 in ((x+1,y), (x-1,y), (x,y+1), (x,y-1)):
+            if 0 <= x2 < raw_obs.shape[2] and 0 <= y2 < raw_obs.shape[2] and raw_obs[BODY][y2][x2] == 0 and (y2, x2) not in seen:
+                val = hamiltonian_grid[y2, x2]
+                print(val, y2,x2, tail_val, head_val)
+                if (val < tail_val and val > head_val and head_val < tail_val) or ((val < tail_val or val > head_val) and head_val > tail_val):
+                    
+                    q.append(path + [(y2, x2)])
+                    seen.add((y2, x2))
+    
+    return [[]]
+
+def optimised_hamiltonian_path_search(raw_obs):
+    '''
+    Optimised hamiltonian path search on raw observation (takes shortcuts)
+    '''
+    global path, hamiltonian_grid, path_h
+
+    if path_h is None:
+        path_h = hamiltonian_path_helper(raw_obs)
+
+    if hamiltonian_grid is None:
+        hamiltonian_grid = np.zeros((raw_obs.shape[2],raw_obs.shape[2]))
+        for i, x in enumerate(path_h[:-2]):
+            hamiltonian_grid[x[0], x[1]] = i
+
+    print(hamiltonian_grid)
+
+    coord_priority = greedy_search_helper(raw_obs)[:2]
+    
+    tail_coord = (raw_obs[BODY] == 1).nonzero()[0]
+    tail_val = hamiltonian_grid[tail_coord[0], tail_coord[1]]
+
+    head_coord = raw_obs[HEAD].nonzero()[0]
+    head_val = hamiltonian_grid[head_coord[0], head_coord[1]]
+
+    food_coord = raw_obs[FOOD].nonzero()[0]
+    food_val = hamiltonian_grid[food_coord[0], food_coord[1]]
+
+    best_dir = None
+
+    for direction in coord_priority:
+        new_head = head_coord + dir_to_offset[direction]
+
+        if new_head.min() < 0:
+            continue
+        elif new_head.max() >= raw_obs.shape[2]:
+            continue
+
+        elif raw_obs[BODY][tuple(new_head)] == 0:
+            val = hamiltonian_grid[new_head[0], new_head[1]]
+
+
+            if food_val == val:
+                return direction
+
+            if head_val > tail_val:
+                if val > head_val and val > tail_val:
+                    best_dir = direction
+                    break
+                elif val < head_val and val < tail_val:
+                    best_dir = direction
+                    break
+            elif head_val < tail_val:
+                if val > head_val and val < tail_val:
+                    best_dir = direction
+                    break
+
+    
+    # print(val, head_val, tail_val, best_dir)
+    if best_dir is None:
+        i = np.where((path_h == head_coord.numpy()).all(axis=1))[0][0]
+        j = i+1
+        if j > len(path_h): j=0
+        res = torch.where(dir_to_offset == (torch.tensor(path_h[j]) - head_coord))[0][1]
+        return int(res)
+    else:
+        return best_dir
+            
+    # tail_coord = (raw_obs[BODY] == 1).nonzero()[0]
+    # tail_val = hamiltonian_grid[tail_coord[0], tail_coord[1]]
+
+    # head_coord = raw_obs[HEAD].nonzero()[0]
+    # head_val = hamiltonian_grid[head_coord[0], head_coord[1]]
+
+    # food_coord = raw_obs[FOOD].nonzero()[0]
+    # food_val = hamiltonian_grid[food_coord[0], food_coord[1]]
+
+    
+
+    # best_dir = -1
+
+    # for direction in range(4):
+    #     new_head = head_coord + dir_to_offset[direction]
+
+    #     if new_head.min() < 0:
+    #         continue
+    #     elif new_head.max() >= raw_obs.shape[2]:
+    #         continue
+
+    #     if raw_obs[BODY][tuple(new_head)] == 0:
+    #         new_head_val = hamiltonian_grid[new_head[0], new_head[1]]
+
+    #         if food_val == new_head_val:
+    #             return direction
+
+    #         if head_val > tail_val+1:
+    #             if new_head_val > head_val+1 or new_head_val+1 < tail_val:
+    #                 best_dir = direction
+    #         else:
+    #             if new_head_val > head_val+1 and new_head_val+1 < tail_val:
+    #                 best_dir = direction
+
+    # if best_dir == -1:
+    #     i = np.where((path == head_coord.numpy()).all(axis=1))[0][0]
+    #     j = i+1
+    #     if j > len(path): j=0
+    #     res = torch.where(dir_to_offset == (torch.tensor(path[j]) - head_coord))[0][1]
+    #     return int(res)
+    
+    # return int(best_dir)

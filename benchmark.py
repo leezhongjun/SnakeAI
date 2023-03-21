@@ -1,13 +1,14 @@
 import time, argparse, requests, os
-from stable_baselines3 import DQN
+from stable_baselines3 import DQN, A2C, PPO
 from tqdm import tqdm
 
 from custom_env import SnakeEnv
 import search
 
 DQN_URL = "https://www.dropbox.com/s/mt1y5xh6z4s6pn4/dqn_snake.zip?raw=1"
+A2C_URL = "https://www.dropbox.com/s/jcwxplwtkfffsgr/a2c_snake.zip?raw=1"
 
-algos = {'greedy': search.greedy_search, 'random': search.random_search, 'bfs': search.bfs_search, 'dfs': search.dfs_search, 'ham': search.hamiltonian_path_search,'dqn': None}
+algos = {'greedy': search.greedy_search, 'random': search.random_search, 'bfs': search.bfs_search, 'dfs': search.dfs_search, 'ham': search.hamiltonian_path_search, 'op_ham': search.optimised_hamiltonian_path_search, 'dqn': None, 'a2c': None}
 
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('--algo', type=str, default='greedy', choices=list(algos.keys()), help='Algorithm to use')
@@ -34,6 +35,17 @@ if args.algo == 'dqn':
     env = SnakeEnv(mode='human', grid_size=int(args.grid_size), initial_size=int(args.initial_size), save_video=bool(filename))
     model = DQN.load("dqn_snake", env=env)
     rl = True
+
+elif args.algo == 'a2c':
+    if not os.path.exists('a2c_snake.zip'):
+        resp = requests.get(A2C_URL)
+        with open('a2c_snake.zip', "wb") as f:
+            f.write(resp.content)
+        
+    env = SnakeEnv(mode='human', grid_size=int(args.grid_size), initial_size=int(args.initial_size), save_video=bool(filename))
+    model = A2C.load("a2c_snake", env=env)
+    rl = True
+
 else:
     algo = algos[args.algo]
     env = SnakeEnv(mode='human', grid_size=int(args.grid_size), initial_size=int(args.initial_size), save_video=bool(filename))
@@ -65,7 +77,8 @@ for x in pbar:
         if done:
             break
         
-    env.save_video_func(f"{filename}_{x}.gif")
+    if filename:
+        env.save_video_func(f"{filename}_{x}.gif")
     ep_r = env.get_score()
     total_s += steps
     total_r_per_s += ep_r/steps
