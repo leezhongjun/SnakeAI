@@ -60,9 +60,11 @@ Each algorithm is tested for 1000 episodes
  - ![#12b5cb](https://placehold.co/15x15/12b5cb/12b5cb.png) - A2C
 
 Mean Episode Reward per Episode
+
 ![mean_reward](https://user-images.githubusercontent.com/80515759/226867371-3eb0bd7c-3856-4741-80e8-9108dd501691.png)
 
 Mean Episode Length per Episode
+
 ![mean_length](https://user-images.githubusercontent.com/80515759/226867800-06953fa1-0410-43df-91e3-bb8518a4f38d.png)
 
 ## Gym environment
