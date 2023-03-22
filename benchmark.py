@@ -1,5 +1,6 @@
 import time, argparse, requests, os
 from stable_baselines3 import DQN, A2C, PPO
+from sb3_contrib import QRDQN
 from tqdm import tqdm
 
 from custom_env import SnakeEnv
@@ -7,8 +8,9 @@ import search
 
 DQN_URL = "https://www.dropbox.com/s/mt1y5xh6z4s6pn4/dqn_snake.zip?raw=1"
 A2C_URL = "https://www.dropbox.com/s/jcwxplwtkfffsgr/a2c_snake.zip?raw=1"
+QRDQN_URL = 'https://www.dropbox.com/s/8kge9w36u0djquh/qrdqn_snake.zip?raw=1'
 
-algos = {'greedy': search.greedy_search, 'random': search.random_search, 'bfs': search.bfs_search, 'dfs': search.dfs_search, 'ham': search.hamiltonian_path_search, 'op_ham': search.optimised_hamiltonian_path_search, 'dqn': None, 'a2c': None}
+algos = {'greedy': search.greedy_search, 'random': search.random_search, 'bfs': search.bfs_search, 'dfs': search.dfs_search, 'ham': search.hamiltonian_path_search, 'op_ham': search.optimised_hamiltonian_path_search, 'dqn': None, 'a2c': None, 'qrdqn': None}
 
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('--algo', type=str, default='greedy', choices=list(algos.keys()), help='Algorithm to use')
@@ -44,6 +46,16 @@ elif args.algo == 'a2c':
         
     env = SnakeEnv(mode='human', grid_size=int(args.grid_size), initial_size=int(args.initial_size), save_video=bool(filename))
     model = A2C.load("a2c_snake", env=env)
+    rl = True
+
+elif args.algo == 'qrdqn':
+    if not os.path.exists('qrdqn_snake.zip'):
+        resp = requests.get(QRDQN_URL)
+        with open('qrdqn_snake.zip', "wb") as f:
+            f.write(resp.content)
+        
+    env = SnakeEnv(mode='human', grid_size=int(args.grid_size), initial_size=int(args.initial_size), save_video=bool(filename))
+    model = QRDQN.load("qrdqn_snake", env=env)
     rl = True
 
 else:
@@ -83,4 +95,4 @@ for x in pbar:
     total_s += steps
     total_r_per_s += ep_r/steps
     total_r += ep_r
-    pbar.set_description(f"Episode {x+1}/{ep} | Episode score, steps, score per step: {ep_r:.2f}, {steps:.2f}, {ep_r/steps:.2f} | Avg score, steps, score per step: : {total_r/(x+1):.2f}, {total_s/(x+1):.2f}, {total_r_per_s/(x+1):.2f}")
+    pbar.set_description(f"Episode {x+1}/{ep} | Episode score, steps, score per step: {ep_r:.2f}, {steps:.1f}, {ep_r/steps:.5f} | Avg score, steps, score per step: : {total_r/(x+1):.2f}, {total_s/(x+1):.1f}, {total_r_per_s/(x+1):.5f}")

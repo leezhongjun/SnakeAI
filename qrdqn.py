@@ -21,7 +21,7 @@ model = QRDQN('CnnPolicy', env, verbose=1, \
                 optimize_memory_usage=False)
 
 
-# # Train the agent and display a progress bar
+# Train the agent and display a progress bar
 model.learn(total_timesteps=int(1e7), progress_bar=True, callback=checkpoint_callback)
 # Save the agent
 model.save("qrdqn_snake")
@@ -32,7 +32,7 @@ model = QRDQN.load("qrdqn_snake", env=env)
 obs = env.reset()
 while True:
     action, _states = model.predict(obs, deterministic=True)
-    obs, reward, done, info = env.step(action)
+    obs, reward, done, info = env.step(int(action))
     env.render()
     if done:
       obs = env.reset()
