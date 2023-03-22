@@ -54,6 +54,16 @@ Each algorithm is tested for 1000 episodes
  - All models trained for 10,000,000 episodes
  - Hyperparameters based on those used on Atari games
  - Script downloads trained models automatically
+### Training graphs
+ - ![#425066](https://placehold.co/15x15/425066/425066.png) - DQN
+ - ![#9334e6](https://placehold.co/15x15/9334e6/9334e6.png) - QR-DQN
+ - ![#12b5cb](https://placehold.co/15x15/12b5cb/12b5cb.png) - A2C
+
+Mean Episode Reward per Episode
+![mean_reward](https://user-images.githubusercontent.com/80515759/226867371-3eb0bd7c-3856-4741-80e8-9108dd501691.png)
+
+Mean Episode Length per Episode
+![mean_length](https://user-images.githubusercontent.com/80515759/226867800-06953fa1-0410-43df-91e3-bb8518a4f38d.png)
 
 ## Gym environment
 Uses a custom [Gymnasium](https://gymnasium.farama.org/) environment for snake game
