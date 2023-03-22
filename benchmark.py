@@ -10,7 +10,7 @@ DQN_URL = "https://www.dropbox.com/s/mt1y5xh6z4s6pn4/dqn_snake.zip?raw=1"
 A2C_URL = "https://www.dropbox.com/s/jcwxplwtkfffsgr/a2c_snake.zip?raw=1"
 QRDQN_URL = 'https://www.dropbox.com/s/8kge9w36u0djquh/qrdqn_snake.zip?raw=1'
 
-algos = {'greedy': search.greedy_search, 'random': search.random_search, 'bfs': search.bfs_search, 'dfs': search.dfs_search, 'ham': search.hamiltonian_path_search, 'op_ham': search.optimised_hamiltonian_path_search, 'dqn': None, 'a2c': None, 'qrdqn': None}
+algos = {'greedy': search.greedy_search, 'random': search.random_search, 'bfs': search.bfs_search, 'dfs': search.dfs_search, 'ham': search.hamiltonian_path_search, 'op_ham': search.optimised_hamiltonian_path_search, 'dqn': None, 'qrdqn': None, 'a2c': None}
 
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('--algo', type=str, default='greedy', choices=list(algos.keys()), help='Algorithm to use')
