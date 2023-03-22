@@ -102,14 +102,6 @@ python benchmark.py [-h] [--algo {greedy,random,bfs,dfs,ham,op_ham,dqn,qrdqn,a2c
 tensorboard --logdir ./tensorboard/
 ```
 
-### To do
- - [x] Add snake body border
- - [ ] Finish training other models
-    - [x] QR-DQN
-    - [ ] PPO
-    - [ ] Recurrent PPO
-    - [x] A2C
-
 ### References
  - [Automated Snake Game Solvers via AI Search Algorithms (pdf)](https://bpb-us-e2.wpmucdn.com/sites.uci.edu/dist/5/1894/files/2016/12/AutomatedSnakeGameSolvers.pdf)
  - [chuyangliu/snake](https://github.com/chuyangliu/snake)
